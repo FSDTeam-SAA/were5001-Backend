@@ -358,3 +358,4 @@ npm run test:e2e       # End-to-end tests
 | DB model | `require('../models/User')` | `@InjectModel(User.name)` via DI |
 | Validation | Manual `if (!req.body.email)` | `@IsEmail()` on DTO + `ValidationPipe` |
 # were5001-Backend
+# were5001-Backend
