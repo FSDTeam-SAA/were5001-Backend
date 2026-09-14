@@ -1,5 +1,10 @@
 import {
-  ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logger,
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
@@ -33,7 +38,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = res;
         errorSources = [{ path: '', message }];
       } else {
-        message = Array.isArray(res.message) ? 'Validation failed' : (res.message || exception.message);
+        message = Array.isArray(res.message)
+          ? 'Validation failed'
+          : res.message || exception.message;
         errorSources = Array.isArray(res.message)
           ? res.message.map((msg: string) => ({ path: '', message: msg }))
           : [{ path: '', message }];
@@ -42,15 +49,20 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       statusCode = HttpStatus.BAD_REQUEST;
       message = 'Validation failed';
       errorSources = Object.values(exception.errors).map((e: any) => ({
-        path: e?.path || '', message: e?.message || '',
+        path: e?.path || '',
+        message: e?.message || '',
       }));
     } else if (exception instanceof MongooseError.CastError) {
       statusCode = HttpStatus.BAD_REQUEST;
       message = `Invalid ${exception.path}`;
       errorSources = [{ path: exception.path, message }];
-    } else if (exception instanceof MongoServerError && exception.code === 11000) {
+    } else if (
+      exception instanceof MongoServerError &&
+      exception.code === 11000
+    ) {
       statusCode = HttpStatus.CONFLICT;
-      const field = Object.keys((exception as any).keyValue || {})[0] || 'field';
+      const field =
+        Object.keys((exception as any).keyValue || {})[0] || 'field';
       message = `${field} already exists`;
       errorSources = [{ path: field, message }];
     } else if (exception instanceof Error) {

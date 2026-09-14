@@ -6,6 +6,10 @@ import configs from './config';
 import { LoggerModule } from './common/logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { SessionModule } from './modules/session/session.module';
+import { AccountsModule } from './modules/accounts/accounts.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
+import { PricingModule } from './modules/pricing/pricing.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './infrastructure/database/database.module';
@@ -32,12 +36,12 @@ import { DatabaseModule } from './infrastructure/database/database.module';
     DatabaseModule,
     AuthModule,
     UserModule,
+    SessionModule,
+    AccountsModule,
+    CatalogModule,
+    PricingModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
-  ],
+  providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
-
 export class AppModule {}

@@ -15,7 +15,8 @@ import mongoose from 'mongoose';
         const env = configService.get<string>('app.env');
 
         mongoose.connection.on('connected', () => {
-          if (env !== 'production') logger.log('MongoDB connected successfully');
+          if (env !== 'production')
+            logger.log('MongoDB connected successfully');
         });
 
         mongoose.connection.on('error', (err) => {
@@ -33,5 +34,4 @@ import mongoose from 'mongoose';
   ],
   exports: [MongooseModule],
 })
-
 export class DatabaseModule {}

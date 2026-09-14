@@ -37,7 +37,11 @@ export class EmailService implements OnModuleInit {
     }
   }
 
-  async sendEmail(options: { to: string; subject: string; html: string }): Promise<void> {
+  async sendEmail(options: {
+    to: string;
+    subject: string;
+    html: string;
+  }): Promise<void> {
     try {
       await this.transporter.sendMail({
         from: `"App" <${this.configService.get<string>('email.from')}>`,

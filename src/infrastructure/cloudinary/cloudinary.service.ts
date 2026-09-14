@@ -22,11 +22,14 @@ export class CloudinaryService implements OnModuleInit {
     publicId: string,
     folder: string,
   ): Promise<{ url: string; publicId: string }> {
-    const result: UploadApiResponse = await cloudinary.uploader.upload(filePath, {
-      folder,
-      public_id: publicId,
-      resource_type: 'auto',
-    });
+    const result: UploadApiResponse = await cloudinary.uploader.upload(
+      filePath,
+      {
+        folder,
+        public_id: publicId,
+        resource_type: 'auto',
+      },
+    );
 
     try {
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
@@ -42,7 +45,9 @@ export class CloudinaryService implements OnModuleInit {
 
     let publicId = urlOrPublicId;
     if (urlOrPublicId.startsWith('http')) {
-      const match = urlOrPublicId.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[^.]+)?$/);
+      const match = urlOrPublicId.match(
+        /\/upload\/(?:v\d+\/)?(.+?)(?:\.[^.]+)?$/,
+      );
       if (match) publicId = match[1];
     }
 
@@ -54,6 +59,8 @@ export class CloudinaryService implements OnModuleInit {
 
     try {
       await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
-    } catch { /* not raw type — ignore */ }
+    } catch {
+      /* not raw type — ignore */
+    }
   }
 }

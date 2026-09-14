@@ -1,6 +1,6 @@
 import { diskStorage } from 'multer';
 import * as path from 'path';
-import * as fs   from 'fs';
+import * as fs from 'fs';
 
 export const createDiskStorage = (subfolder: 'images' | 'files' | 'audio') =>
   diskStorage({
@@ -17,6 +17,6 @@ export const createDiskStorage = (subfolder: 'images' | 'files' | 'audio') =>
 
 // file size limits per type
 export const FILE_SIZE_LIMITS = {
-  audio: 200 * 1024 * 1024,   // 200MB per audio file
-  image: 10  * 1024 * 1024,   // 10MB per image
+  audio: 200 * 1024 * 1024, // 200MB per audio file
+  image: 10 * 1024 * 1024, // 10MB per image
 };

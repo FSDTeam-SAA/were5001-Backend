@@ -12,6 +12,6 @@ export const IS_PUBLIC_KEY = 'isPublic';
  *   @Public()
  *   @Post('register')
  *   register(@Body() dto: RegisterDto) { ... }
-*/
+ */
 
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);

@@ -1,5 +1,8 @@
 import {
-  Injectable, CanActivate, ExecutionContext, UnauthorizedException,
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
@@ -38,7 +41,9 @@ export class JwtAuthGuard implements CanActivate {
         secret: this.configService.get<string>('auth.accessTokenSecret'),
       });
 
-      const user = await this.userModel.findById(decoded._id).select(USER_SELECT_FIELDS);
+      const user = await this.userModel
+        .findById(decoded._id)
+        .select(USER_SELECT_FIELDS);
       if (!user) throw new UnauthorizedException('User not found');
 
       request.user = user;

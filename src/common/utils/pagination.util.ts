@@ -4,7 +4,7 @@ export const createFilter = (
   options?: { searchField?: string; dateField?: string },
 ): Record<string, any> => {
   const searchField = options?.searchField ?? 'name';
-  const dateField   = options?.dateField   ?? 'createdAt';
+  const dateField = options?.dateField ?? 'createdAt';
   const filter: Record<string, any> = {};
 
   if (search) {
@@ -12,9 +12,17 @@ export const createFilter = (
   }
 
   if (date) {
-    const _date      = new Date(date);
-    const startOfDay = new Date(_date.getFullYear(), _date.getMonth(), _date.getDate());
-    const endOfDay   = new Date(_date.getFullYear(), _date.getMonth(), _date.getDate() + 1);
+    const _date = new Date(date);
+    const startOfDay = new Date(
+      _date.getFullYear(),
+      _date.getMonth(),
+      _date.getDate(),
+    );
+    const endOfDay = new Date(
+      _date.getFullYear(),
+      _date.getMonth(),
+      _date.getDate() + 1,
+    );
     filter[dateField] = { $gte: startOfDay, $lt: endOfDay };
   }
 
@@ -29,11 +37,14 @@ export const createMeta = (page: number, limit: number, total: number) => ({
   totalPages: Math.ceil(total / limit),
 });
 
-
-export const createPaginationInfo = (page: number, limit: number, totalData: number) => ({
-  currentPage:  page,
-  totalPages:   Math.ceil(totalData / limit),
+export const createPaginationInfo = (
+  page: number,
+  limit: number,
+  totalData: number,
+) => ({
+  currentPage: page,
+  totalPages: Math.ceil(totalData / limit),
   totalData,
-  hasNextPage:  page * limit < totalData,
-  hasPrevPage:  page > 1,
+  hasNextPage: page * limit < totalData,
+  hasPrevPage: page > 1,
 });

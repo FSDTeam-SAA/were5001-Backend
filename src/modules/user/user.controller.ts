@@ -24,12 +24,17 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { RoleType } from '../../common/enums/role.enum';
-import { GetUsersQueryDto, UpdateUserDto, AdminUpdateUserDto } from './dto/user.dto';
+import {
+  GetUsersQueryDto,
+  UpdateUserDto,
+  AdminUpdateUserDto,
+} from './dto/user.dto';
 
 // ─── Multer Storage Config ───────────
 const multerStorage = diskStorage({
   destination: (req, file, cb) => {
-    const folder = file.mimetype === 'application/pdf' ? 'uploads/files' : 'uploads/images';
+    const folder =
+      file.mimetype === 'application/pdf' ? 'uploads/files' : 'uploads/images';
     fs.mkdirSync(folder, { recursive: true });
     cb(null, folder);
   },
@@ -93,7 +98,7 @@ export class UserController {
     if (!files?.profileImage?.length) {
       throw new BadRequestException('Profile image is required');
     }
-    return this.userService.createAvatar(userId, files as any);
+    return this.userService.createAvatar(userId, files);
   }
 
   @Put('upload-avatar')
@@ -109,7 +114,7 @@ export class UserController {
     if (!files?.profileImage?.length) {
       throw new BadRequestException('Profile image is required');
     }
-    return this.userService.updateAvatar(userId, files as any);
+    return this.userService.updateAvatar(userId, files);
   }
 
   @Delete('upload-avatar')
@@ -132,7 +137,7 @@ export class UserController {
     if (!files?.multiProfileImage?.length) {
       throw new BadRequestException('At least one avatar image is required');
     }
-    return this.userService.createMultipleAvatars(userId, files as any);
+    return this.userService.createMultipleAvatars(userId, files);
   }
 
   @Put('upload-multiple-avatar')
@@ -148,7 +153,7 @@ export class UserController {
     if (!files?.multiProfileImage?.length) {
       throw new BadRequestException('At least one avatar image is required');
     }
-    return this.userService.updateMultipleAvatars(userId, files as any);
+    return this.userService.updateMultipleAvatars(userId, files);
   }
 
   @Delete('upload-multiple-avatar')
@@ -171,7 +176,7 @@ export class UserController {
     if (!files?.userPDF?.length) {
       throw new BadRequestException('PDF file is required');
     }
-    return this.userService.createPDF(userId, files as any);
+    return this.userService.createPDF(userId, files);
   }
 
   @Put('upload-file')
@@ -187,7 +192,7 @@ export class UserController {
     if (!files?.userPDF?.length) {
       throw new BadRequestException('PDF file is required');
     }
-    return this.userService.updatePDF(userId, files as any);
+    return this.userService.updatePDF(userId, files);
   }
 
   @Delete('upload-file')
@@ -207,10 +212,7 @@ export class UserController {
   @Put(':id')
   @UseGuards(RolesGuard)
   @Roles(RoleType.ADMIN)
-  adminUpdateUser(
-    @Param('id') id: string,
-    @Body() dto: AdminUpdateUserDto,
-  ) {
+  adminUpdateUser(@Param('id') id: string, @Body() dto: AdminUpdateUserDto) {
     return this.userService.adminUpdateUser(id, dto);
   }
 

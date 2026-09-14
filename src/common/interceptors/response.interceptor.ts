@@ -26,7 +26,10 @@ export interface ApiResponse<T = any> {
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<ApiResponse> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<ApiResponse> {
     const res = context.switchToHttp().getResponse<Response>();
     const startTime = Date.now();
 

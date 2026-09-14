@@ -1,26 +1,26 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-const RESET  = '\x1b[0m';
-const BOLD   = '\x1b[1m';
-const DIM    = '\x1b[2m';
+const RESET = '\x1b[0m';
+const BOLD = '\x1b[1m';
+const DIM = '\x1b[2m';
 
 const COLOR = {
-  log:     '\x1b[32m',   // green
-  error:   '\x1b[31m',   // red
-  warn:    '\x1b[33m',   // yellow
-  debug:   '\x1b[36m',   // cyan
-  verbose: '\x1b[35m',   // magenta
-  ts:      '\x1b[90m',   // dark gray
-  ctx:     '\x1b[34m',   // blue
-  bracket: '\x1b[90m',   // dark gray
+  log: '\x1b[32m', // green
+  error: '\x1b[31m', // red
+  warn: '\x1b[33m', // yellow
+  debug: '\x1b[36m', // cyan
+  verbose: '\x1b[35m', // magenta
+  ts: '\x1b[90m', // dark gray
+  ctx: '\x1b[34m', // blue
+  bracket: '\x1b[90m', // dark gray
 };
 
 const LABEL: Record<string, string> = {
-  log:     ' LOG ',
-  error:   ' ERR ',
-  warn:    ' WRN ',
-  debug:   ' DBG ',
+  log: ' LOG ',
+  error: ' ERR ',
+  warn: ' WRN ',
+  debug: ' DBG ',
   verbose: ' VRB ',
 };
 
@@ -42,19 +42,19 @@ export class AppLogger implements LoggerService {
   }
 
   private print(level: LogLevel, message: any, extra?: string) {
-    const ts      = new Date().toISOString();
-    const c       = COLOR[level];
-    const ctx     = this.context ?? 'App';
-    const label   = `${BOLD}${c}${LABEL[level]}${RESET}`;
-    const time    = `${COLOR.ts}${ts}${RESET}`;
+    const ts = new Date().toISOString();
+    const c = COLOR[level];
+    const ctx = this.context ?? 'App';
+    const label = `${BOLD}${c}${LABEL[level]}${RESET}`;
+    const time = `${COLOR.ts}${ts}${RESET}`;
     const context = `${COLOR.bracket}[${RESET}${COLOR.ctx}${BOLD}${ctx}${RESET}${COLOR.bracket}]${RESET}`;
-    const msg     = `${c}${message}${RESET}`;
-    const tail    = extra ? `  ${DIM}${extra}${RESET}` : '';
+    const msg = `${c}${message}${RESET}`;
+    const tail = extra ? `  ${DIM}${extra}${RESET}` : '';
 
     const line = `${time} ${label} ${context} ${msg}${tail}`;
 
     if (level === 'error') return console.error(line);
-    if (level === 'warn')  return console.warn(line);
+    if (level === 'warn') return console.warn(line);
     return console.log(line);
   }
 
@@ -65,7 +65,8 @@ export class AppLogger implements LoggerService {
 
   error(message: any, trace?: string) {
     this.print('error', message, undefined);
-    if (trace && this.isDev()) console.error(`${COLOR.error}${DIM}${trace}${RESET}`);
+    if (trace && this.isDev())
+      console.error(`${COLOR.error}${DIM}${trace}${RESET}`);
   }
 
   warn(message: any, context?: string) {

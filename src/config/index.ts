@@ -6,4 +6,10 @@ import emailConfig from './email.config';
 
 export { appConfig, authConfig, cloudinaryConfig, databaseConfig, emailConfig };
 
-export default [appConfig, authConfig, cloudinaryConfig, databaseConfig, emailConfig];
+export default [
+  appConfig,
+  authConfig,
+  cloudinaryConfig,
+  databaseConfig,
+  emailConfig,
+];

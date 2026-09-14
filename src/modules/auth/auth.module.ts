@@ -16,7 +16,10 @@ import { EmailModule } from '../../infrastructure/email/email.module';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('auth.accessTokenSecret'),
         signOptions: {
-          expiresIn: configService.get<string>('auth.accessTokenExpires', '7d') as any,
+          expiresIn: configService.get<string>(
+            'auth.accessTokenExpires',
+            '7d',
+          ) as any,
         },
       }),
       inject: [ConfigService],
@@ -27,5 +30,4 @@ import { EmailModule } from '../../infrastructure/email/email.module';
   providers: [AuthService, JwtAuthGuard],
   exports: [AuthService, MongooseModule, JwtModule, JwtAuthGuard],
 })
-
 export class AuthModule {}
