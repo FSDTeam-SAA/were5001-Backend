@@ -22,9 +22,9 @@ export class CreateItemDto {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(256)
-  image: string;
+  image?: string;
 
   @Type(() => Boolean)
   @IsBoolean()
@@ -76,9 +76,9 @@ export class CreateSkillingDto {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(256)
-  image: string;
+  image?: string;
 
   @IsObject()
   @IsOptional()
@@ -114,6 +114,26 @@ export class UpdateSkillingDto {
   @IsBoolean()
   @IsOptional()
   visible?: boolean;
+}
+
+export class UpdateSkillingMethodsDto {
+  @IsObject()
+  @IsNotEmpty()
+  methods: Record<string, any>;
+}
+
+export class PatchStockDto {
+  @Type(() => Boolean)
+  @IsBoolean()
+  @IsNotEmpty()
+  inStock: boolean;
+}
+
+export class PatchVisibilityDto {
+  @Type(() => Boolean)
+  @IsBoolean()
+  @IsNotEmpty()
+  visible: boolean;
 }
 
 export class QueryCatalogDto {

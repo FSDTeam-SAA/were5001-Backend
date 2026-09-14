@@ -219,4 +219,128 @@ export class CatalogService {
       message: 'Skilling service deleted successfully',
     };
   }
+
+  // ─── Quick Toggles & Extended Operations ───────────────────────────────────
+  async setItemStock(game: GameCatalogType, id: string, inStock: boolean) {
+    const model = this.getItemModel(game);
+    const query = id.match(/^[0-9a-fA-F]{24}$/) ? { _id: id } : { item_id: id };
+    const item = await model.findOneAndUpdate(
+      query,
+      { inStock },
+      { new: true },
+    );
+    if (!item) {
+      throw new NotFoundException(
+        `Item with identifier '${id}' not found in ${game.toUpperCase()}`,
+      );
+    }
+    return {
+      message: `${game.toUpperCase()} item stock updated to ${inStock}`,
+      data: item,
+    };
+  }
+
+  async toggleItemStock(game: GameCatalogType, id: string) {
+    const model = this.getItemModel(game);
+    const query = id.match(/^[0-9a-fA-F]{24}$/) ? { _id: id } : { item_id: id };
+    const item = await model.findOne(query);
+    if (!item) {
+      throw new NotFoundException(
+        `Item with identifier '${id}' not found in ${game.toUpperCase()}`,
+      );
+    }
+    item.inStock = !item.inStock;
+    await item.save();
+    return {
+      message: `${game.toUpperCase()} item stock toggled to ${item.inStock}`,
+      data: item,
+    };
+  }
+
+  async setItemVisibility(game: GameCatalogType, id: string, visible: boolean) {
+    const model = this.getItemModel(game);
+    const query = id.match(/^[0-9a-fA-F]{24}$/) ? { _id: id } : { item_id: id };
+    const item = await model.findOneAndUpdate(
+      query,
+      { visible },
+      { new: true },
+    );
+    if (!item) {
+      throw new NotFoundException(
+        `Item with identifier '${id}' not found in ${game.toUpperCase()}`,
+      );
+    }
+    return {
+      message: `${game.toUpperCase()} item visibility updated to ${visible}`,
+      data: item,
+    };
+  }
+
+  async toggleItemVisibility(game: GameCatalogType, id: string) {
+    const model = this.getItemModel(game);
+    const query = id.match(/^[0-9a-fA-F]{24}$/) ? { _id: id } : { item_id: id };
+    const item = await model.findOne(query);
+    if (!item) {
+      throw new NotFoundException(
+        `Item with identifier '${id}' not found in ${game.toUpperCase()}`,
+      );
+    }
+    item.visible = !item.visible;
+    await item.save();
+    return {
+      message: `${game.toUpperCase()} item visibility toggled to ${item.visible}`,
+      data: item,
+    };
+  }
+
+  async setSkillingVisibility(id: string, visible: boolean) {
+    const query = id.match(/^[0-9a-fA-F]{24}$/) ? { _id: id } : { item_id: id };
+    const skilling = await this.skillingModel.findOneAndUpdate(
+      query,
+      { visible },
+      { new: true },
+    );
+    if (!skilling) {
+      throw new NotFoundException(
+        `Skilling service with identifier '${id}' not found`,
+      );
+    }
+    return {
+      message: `Skilling service visibility updated to ${visible}`,
+      data: skilling,
+    };
+  }
+
+  async toggleSkillingVisibility(id: string) {
+    const query = id.match(/^[0-9a-fA-F]{24}$/) ? { _id: id } : { item_id: id };
+    const skilling = await this.skillingModel.findOne(query);
+    if (!skilling) {
+      throw new NotFoundException(
+        `Skilling service with identifier '${id}' not found`,
+      );
+    }
+    skilling.visible = !skilling.visible;
+    await skilling.save();
+    return {
+      message: `Skilling service visibility toggled to ${skilling.visible}`,
+      data: skilling,
+    };
+  }
+
+  async updateSkillingMethods(id: string, methods: Record<string, any>) {
+    const query = id.match(/^[0-9a-fA-F]{24}$/) ? { _id: id } : { item_id: id };
+    const skilling = await this.skillingModel.findOne(query);
+    if (!skilling) {
+      throw new NotFoundException(
+        `Skilling service with identifier '${id}' not found`,
+      );
+    }
+    skilling.methods = { ...(skilling.methods || {}), ...methods };
+    skilling.markModified('methods');
+    await skilling.save();
+    return {
+      message: 'Skilling methods updated successfully',
+      data: skilling,
+    };
+  }
 }

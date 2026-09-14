@@ -5,6 +5,7 @@ import { Rs3Item, Rs3ItemSchema } from './schemas/rs3-item.schema';
 import { Skilling, SkillingSchema } from './schemas/skilling.schema';
 import { CatalogService } from './catalog.service';
 import { CatalogController } from './catalog.controller';
+import { CloudinaryModule } from '../../infrastructure/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CatalogController } from './catalog.controller';
       { name: Rs3Item.name, schema: Rs3ItemSchema },
       { name: Skilling.name, schema: SkillingSchema },
     ]),
+    CloudinaryModule,
   ],
   controllers: [CatalogController],
   providers: [CatalogService],
