@@ -1,0 +1,5202 @@
+{
+  "info": {
+    "_postman_id": "were5001-backend-collection-v1",
+    "name": "WERE5001 Backend API",
+    "description": "Comprehensive Postman collection for all WERE5001 Backend endpoints including Auth, User Management, Catalog (OSRS, RS3, Skilling), Accounts, Pricing (Valutes, Base Price, Gateways), Sessions, and System Health.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "65cb75f68fb978d2bcfb1234",
+      "type": "string"
+    },
+    {
+      "key": "adminUserId",
+      "value": "65cb75f68fb978d2bcfb5678",
+      "type": "string"
+    },
+    {
+      "key": "osrsItemId",
+      "value": "65cb75f68fb978d2bcfb2001",
+      "type": "string"
+    },
+    {
+      "key": "rs3ItemId",
+      "value": "65cb75f68fb978d2bcfb2002",
+      "type": "string"
+    },
+    {
+      "key": "skillingId",
+      "value": "65cb75f68fb978d2bcfb2003",
+      "type": "string"
+    },
+    {
+      "key": "osrsAccountId",
+      "value": "65cb75f68fb978d2bcfb3001",
+      "type": "string"
+    },
+    {
+      "key": "rs3AccountId",
+      "value": "65cb75f68fb978d2bcfb3002",
+      "type": "string"
+    },
+    {
+      "key": "valuteId",
+      "value": "65cb75f68fb978d2bcfb4001",
+      "type": "string"
+    },
+    {
+      "key": "paymentGatewayId",
+      "value": "65cb75f68fb978d2bcfb5001",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "session_demo_987654321",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Health & Welcome",
+      "item": [
+        {
+          "name": "Get Welcome Message",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "Get root API hello message from AppController"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check server status and current timestamp"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Create a new user account with default role USER",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var res = pm.response.json();",
+                  "    if (res.data && res.data._id) {",
+                  "        pm.collectionVariables.set(\"userId\", res.data._id);",
+                  "        console.log(\"Registered userId saved to collection variables\");",
+                  "    }",
+                  "}",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate user and automatically save accessToken, refreshToken, and userId to collection variables",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    var res = pm.response.json();",
+                  "    if (res.data && res.data.accessToken) {",
+                  "        pm.collectionVariables.set(\"accessToken\", res.data.accessToken);",
+                  "        console.log(\"accessToken saved to collection variables\");",
+                  "    }",
+                  "    if (res.data && res.data.user && res.data.user.refreshToken) {",
+                  "        pm.collectionVariables.set(\"refreshToken\", res.data.user.refreshToken);",
+                  "        console.log(\"refreshToken saved to collection variables\");",
+                  "    }",
+                  "    if (res.data && res.data.user && res.data.user._id) {",
+                  "        pm.collectionVariables.set(\"userId\", res.data.user._id);",
+                  "        console.log(\"userId saved to collection variables\");",
+                  "    }",
+                  "}",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate admin user and automatically save adminAccessToken to collection variables",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"adminpassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    var res = pm.response.json();",
+                  "    if (res.data && res.data.accessToken) {",
+                  "        pm.collectionVariables.set(\"adminAccessToken\", res.data.accessToken);",
+                  "        console.log(\"adminAccessToken saved to collection variables\");",
+                  "    }",
+                  "    if (res.data && res.data.user && res.data.user._id) {",
+                  "        pm.collectionVariables.set(\"adminUserId\", res.data.user._id);",
+                  "    }",
+                  "}",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Access Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-access-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-access-token"
+              ]
+            },
+            "description": "Obtain a fresh access token using the stored refresh token",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    var res = pm.response.json();",
+                  "    if (res.data && res.data.accessToken) {",
+                  "        pm.collectionVariables.set(\"accessToken\", res.data.accessToken);",
+                  "    }",
+                  "}",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Forgot Password (Request OTP)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/forget-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "forget-password"
+              ]
+            },
+            "description": "Send 6-digit OTP to the registered user email address",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-code",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "verify-code"
+              ]
+            },
+            "description": "Verify the 6-digit OTP received via email",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"otp\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password (with verified OTP)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
+            },
+            "description": "Set a new password after successful OTP verification",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"newPassword\": \"newsecurepassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password (Authenticated)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/change-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "change-password"
+              ]
+            },
+            "description": "Change current user password while logged in",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"password123\",\n  \"newPassword\": \"updatedpassword456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Invalidate refresh token and log out the user",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03. User Management",
+      "item": [
+        {
+          "name": "Profile (Self)",
+          "item": [
+            {
+              "name": "Get My Profile",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/me",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "me"
+                  ]
+                },
+                "description": "Retrieve authenticated user profile",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update My Profile",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/me",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "me"
+                  ]
+                },
+                "description": "Update personal profile information",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Johnathan Doe\",\n  \"username\": \"johndoe99\",\n  \"dob\": \"1995-05-15\",\n  \"phone\": \"+12345678901\",\n  \"gender\": \"male\",\n  \"bio\": \"Runescape veteran and gold trader.\",\n  \"language\": \"English\",\n  \"country\": \"United States\",\n  \"cityState\": \"New York, NY\",\n  \"roadArea\": \"5th Avenue\",\n  \"postalCode\": \"10001\",\n  \"taxId\": \"TX-998877\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete My Account",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/me",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "me"
+                  ]
+                },
+                "description": "Permanently delete authenticated user account",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "File & Avatar Uploads",
+          "item": [
+            {
+              "name": "Upload Single Avatar",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-avatar",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-avatar"
+                  ]
+                },
+                "description": "Upload a single user avatar image",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "profileImage",
+                      "value": "",
+                      "type": "file",
+                      "description": "Select an image file (jpg, png, webp)"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Single Avatar",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-avatar",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-avatar"
+                  ]
+                },
+                "description": "Update current avatar image",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "profileImage",
+                      "value": "",
+                      "type": "file",
+                      "description": "Replace avatar with a new image file"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Single Avatar",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-avatar",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-avatar"
+                  ]
+                },
+                "description": "Remove single avatar image",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Upload Multiple Avatars",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-multiple-avatar",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-multiple-avatar"
+                  ]
+                },
+                "description": "Upload up to 5 multi-profile gallery images",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "multiProfileImage",
+                      "value": "",
+                      "type": "file",
+                      "description": "Select avatar image 1"
+                    },
+                    {
+                      "key": "multiProfileImage",
+                      "value": "",
+                      "type": "file",
+                      "description": "Select avatar image 2"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Multiple Avatars",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-multiple-avatar",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-multiple-avatar"
+                  ]
+                },
+                "description": "Replace gallery images",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "multiProfileImage",
+                      "value": "",
+                      "type": "file",
+                      "description": "Replace multi-profile images"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Multiple Avatars",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-multiple-avatar",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-multiple-avatar"
+                  ]
+                },
+                "description": "Delete multi-profile gallery images",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Upload PDF File",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-file",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-file"
+                  ]
+                },
+                "description": "Upload document / PDF file for user",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "userPDF",
+                      "value": "",
+                      "type": "file",
+                      "description": "Select a PDF file"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update PDF File",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-file",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-file"
+                  ]
+                },
+                "description": "Update user PDF file",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "userPDF",
+                      "value": "",
+                      "type": "file",
+                      "description": "Replace existing PDF file"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete PDF File",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/upload-file",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "upload-file"
+                  ]
+                },
+                "description": "Delete user PDF file",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Admin User Management",
+          "item": [
+            {
+              "name": "Get All Users (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/all-users?page=1&limit=10&search=&date=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "all-users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page number",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Items per page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Search keyword",
+                      "disabled": false
+                    },
+                    {
+                      "key": "date",
+                      "value": "",
+                      "description": "Filter by date",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Admin endpoint to list all users with pagination and search",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Admins (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/all-admins?page=1&limit=10&search=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "all-admins"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page number",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Items per page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Search keyword",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Admin endpoint to list all admin users",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get User By ID (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{userId}}",
+                      "description": "Target User Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Admin view specific user details",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update User By ID (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{userId}}",
+                      "description": "Target User Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Admin update user details, change role, or toggle verification",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"John Doe (Verified)\",\n  \"role\": \"ADMIN\",\n  \"isVerified\": true,\n  \"hasActiveSubscription\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User By ID (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/user/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{userId}}",
+                      "description": "Target User Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Admin permanently delete a user by ID",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04. Catalog",
+      "item": [
+        {
+          "name": "OSRS Items",
+          "item": [
+            {
+              "name": "Get All OSRS Items",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items?page=1&limit=10&search=&inStock=true&visible=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Filter by item name",
+                      "disabled": false
+                    },
+                    {
+                      "key": "inStock",
+                      "value": "true",
+                      "description": "Filter in stock",
+                      "disabled": false
+                    },
+                    {
+                      "key": "visible",
+                      "value": "true",
+                      "description": "Filter visibility",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List OSRS catalog items with filtering & pagination"
+              },
+              "response": []
+            },
+            {
+              "name": "Get OSRS Item By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsItemId}}",
+                      "description": "OSRS Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Get single OSRS catalog item by ID"
+              },
+              "response": []
+            },
+            {
+              "name": "Create OSRS Item (Admin - JSON)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items"
+                  ]
+                },
+                "description": "Create a new OSRS item (Supports image URL or multipart file upload)",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"item_id\": \"osrs_twisted_bow_01\",\n  \"name\": \"Twisted Bow\",\n  \"image\": \"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300\",\n  \"inStock\": true,\n  \"visible\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data._id) {",
+                      "        pm.collectionVariables.set(\"osrsItemId\", res.data._id);",
+                      "        console.log(\"osrsItemId saved:\", res.data._id);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Create OSRS Item (Admin - Multipart)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items"
+                  ]
+                },
+                "description": "Create OSRS item with file upload",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "item_id",
+                      "value": "osrs_scythe_01",
+                      "type": "text",
+                      "description": ""
+                    },
+                    {
+                      "key": "name",
+                      "value": "Scythe of Vitur",
+                      "type": "text",
+                      "description": ""
+                    },
+                    {
+                      "key": "inStock",
+                      "value": "true",
+                      "type": "text",
+                      "description": ""
+                    },
+                    {
+                      "key": "visible",
+                      "value": "true",
+                      "type": "text",
+                      "description": ""
+                    },
+                    {
+                      "key": "image",
+                      "value": "",
+                      "type": "file",
+                      "description": "Upload item image"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update OSRS Item (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsItemId}}",
+                      "description": "OSRS Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Update OSRS item details",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Twisted Bow (Upgraded)\",\n  \"inStock\": true,\n  \"visible\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Set OSRS Item Stock (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items/:id/stock",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items",
+                    ":id",
+                    "stock"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsItemId}}",
+                      "description": "OSRS Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Explicitly set inStock boolean",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inStock\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Toggle OSRS Item Stock (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items/:id/toggle-stock",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items",
+                    ":id",
+                    "toggle-stock"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsItemId}}",
+                      "description": "OSRS Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Invert current inStock state",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Set OSRS Item Visibility (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items/:id/visibility",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items",
+                    ":id",
+                    "visibility"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsItemId}}",
+                      "description": "OSRS Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Explicitly set visible boolean",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"visible\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Toggle OSRS Item Visibility (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items/:id/toggle-visibility",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items",
+                    ":id",
+                    "toggle-visibility"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsItemId}}",
+                      "description": "OSRS Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Invert current visible state",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete OSRS Item (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/osrs-items/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "osrs-items",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsItemId}}",
+                      "description": "OSRS Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Remove OSRS item from catalog",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "RS3 Items",
+          "item": [
+            {
+              "name": "Get All RS3 Items",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items?page=1&limit=10&search=&inStock=true&visible=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Filter by item name",
+                      "disabled": false
+                    },
+                    {
+                      "key": "inStock",
+                      "value": "true",
+                      "description": "Filter in stock",
+                      "disabled": false
+                    },
+                    {
+                      "key": "visible",
+                      "value": "true",
+                      "description": "Filter visibility",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List RS3 catalog items with filtering & pagination"
+              },
+              "response": []
+            },
+            {
+              "name": "Get RS3 Item By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3ItemId}}",
+                      "description": "RS3 Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Get single RS3 catalog item by ID"
+              },
+              "response": []
+            },
+            {
+              "name": "Create RS3 Item (Admin - JSON)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items"
+                  ]
+                },
+                "description": "Create a new RS3 item",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"item_id\": \"rs3_blue_partyhat_01\",\n  \"name\": \"Blue Partyhat\",\n  \"image\": \"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300\",\n  \"inStock\": true,\n  \"visible\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data._id) {",
+                      "        pm.collectionVariables.set(\"rs3ItemId\", res.data._id);",
+                      "        console.log(\"rs3ItemId saved:\", res.data._id);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update RS3 Item (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3ItemId}}",
+                      "description": "RS3 Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Update RS3 item details",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Blue Partyhat (Mint)\",\n  \"inStock\": true,\n  \"visible\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Set RS3 Item Stock (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items/:id/stock",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items",
+                    ":id",
+                    "stock"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3ItemId}}",
+                      "description": "RS3 Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Set RS3 stock state",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inStock\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Toggle RS3 Item Stock (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items/:id/toggle-stock",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items",
+                    ":id",
+                    "toggle-stock"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3ItemId}}",
+                      "description": "RS3 Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Toggle RS3 stock boolean",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Set RS3 Item Visibility (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items/:id/visibility",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items",
+                    ":id",
+                    "visibility"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3ItemId}}",
+                      "description": "RS3 Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Set RS3 visibility state",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"visible\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Toggle RS3 Item Visibility (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items/:id/toggle-visibility",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items",
+                    ":id",
+                    "toggle-visibility"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3ItemId}}",
+                      "description": "RS3 Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Toggle RS3 visibility boolean",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete RS3 Item (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/rs3-items/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "rs3-items",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3ItemId}}",
+                      "description": "RS3 Item Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Remove RS3 item from catalog",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Skilling Services",
+          "item": [
+            {
+              "name": "Get All Skilling Services",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling?page=1&limit=10&search=&visible=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Filter by skill service name",
+                      "disabled": false
+                    },
+                    {
+                      "key": "visible",
+                      "value": "true",
+                      "description": "Filter visibility",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List all skilling services"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Skilling Service By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{skillingId}}",
+                      "description": "Skilling Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Get skilling service by ID"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Skilling Service (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling"
+                  ]
+                },
+                "description": "Create skilling service package with methods map",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"item_id\": \"osrs_agility_boost_01\",\n  \"name\": \"1-99 Agility Powerleveling\",\n  \"image\": \"https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=300\",\n  \"methods\": {\n    \"rooftop\": {\n      \"title\": \"Rooftop Courses\",\n      \"levels\": \"1-99\",\n      \"pricePerLevel\": 2.5,\n      \"estimatedDays\": 7\n    },\n    \"prifddinas\": {\n      \"title\": \"Prifddinas Course\",\n      \"levels\": \"75-99\",\n      \"pricePerLevel\": 3,\n      \"estimatedDays\": 5\n    }\n  },\n  \"visible\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data._id) {",
+                      "        pm.collectionVariables.set(\"skillingId\", res.data._id);",
+                      "        console.log(\"skillingId saved:\", res.data._id);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Skilling Service (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{skillingId}}",
+                      "description": "Skilling Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Update skilling service properties",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"1-99 Agility Powerleveling (Express)\",\n  \"visible\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Skilling Methods (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling/:id/methods",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling",
+                    ":id",
+                    "methods"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{skillingId}}",
+                      "description": "Skilling Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Patch the methods object of a skilling service",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"methods\": {\n    \"rooftop_express\": {\n      \"title\": \"Rooftop Express 24/7\",\n      \"levels\": \"1-99\",\n      \"pricePerLevel\": 3.5\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Set Skilling Visibility (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling/:id/visibility",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling",
+                    ":id",
+                    "visibility"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{skillingId}}",
+                      "description": "Skilling Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Set skilling visibility state",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"visible\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Toggle Skilling Visibility (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling/:id/toggle-visibility",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling",
+                    ":id",
+                    "toggle-visibility"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{skillingId}}",
+                      "description": "Skilling Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Toggle skilling visibility state",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Skilling Service (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/catalog/skilling/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "catalog",
+                    "skilling",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{skillingId}}",
+                      "description": "Skilling Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Delete skilling service",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05. Accounts",
+      "item": [
+        {
+          "name": "OSRS Accounts",
+          "item": [
+            {
+              "name": "Get All OSRS Accounts",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/osrs?page=1&limit=10&search=&minPrice=0&maxPrice=1000",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "osrs"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Search by account title",
+                      "disabled": false
+                    },
+                    {
+                      "key": "minPrice",
+                      "value": "0",
+                      "description": "Min price filter",
+                      "disabled": false
+                    },
+                    {
+                      "key": "maxPrice",
+                      "value": "1000",
+                      "description": "Max price filter",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List OSRS accounts for sale with filters"
+              },
+              "response": []
+            },
+            {
+              "name": "Get OSRS Account By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/osrs/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "osrs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsAccountId}}",
+                      "description": "OSRS Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Get single OSRS account details"
+              },
+              "response": []
+            },
+            {
+              "name": "Create OSRS Account (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/osrs",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "osrs"
+                  ]
+                },
+                "description": "Create new OSRS account listing",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"acc_id\": \"osrs_pure_60atk\",\n  \"name\": \"60 Attack 1 Def Pure (Infernal Cape)\",\n  \"description\": \"99 Str, 99 Range, 99 Mage, Mithril Gloves, Fire/Infernal Cape, fully quested.\",\n  \"image\": \"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400\",\n  \"price\": 249.99,\n  \"stock\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data._id) {",
+                      "        pm.collectionVariables.set(\"osrsAccountId\", res.data._id);",
+                      "        console.log(\"osrsAccountId saved:\", res.data._id);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update OSRS Account (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/osrs/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "osrs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsAccountId}}",
+                      "description": "OSRS Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Update OSRS account listing",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"60 Attack 1 Def Pure (Infernal Cape) - Promo\",\n  \"price\": 229.99,\n  \"stock\": 3\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Adjust OSRS Account Stock (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/osrs/:id/stock",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "osrs",
+                    ":id",
+                    "stock"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsAccountId}}",
+                      "description": "OSRS Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Adjust account stock count by delta (+1 to increment, -1 to decrement)",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete OSRS Account (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/osrs/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "osrs",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{osrsAccountId}}",
+                      "description": "OSRS Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Delete OSRS account listing",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "RS3 Accounts",
+          "item": [
+            {
+              "name": "Get All RS3 Accounts",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/rs3?page=1&limit=10&search=&minPrice=0&maxPrice=1000",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "rs3"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Search by account title",
+                      "disabled": false
+                    },
+                    {
+                      "key": "minPrice",
+                      "value": "0",
+                      "description": "Min price filter",
+                      "disabled": false
+                    },
+                    {
+                      "key": "maxPrice",
+                      "value": "1000",
+                      "description": "Max price filter",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List RS3 accounts for sale"
+              },
+              "response": []
+            },
+            {
+              "name": "Get RS3 Account By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/rs3/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "rs3",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3AccountId}}",
+                      "description": "RS3 Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Get single RS3 account details"
+              },
+              "response": []
+            },
+            {
+              "name": "Create RS3 Account (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/rs3",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "rs3"
+                  ]
+                },
+                "description": "Create new RS3 account listing",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"acc_id\": \"rs3_maxed_main_2898\",\n  \"name\": \"2898 Total Level RS3 Maxed Main\",\n  \"description\": \"Overloads unlocked, Ancient Curses, all combat styles T92 weapons, 15-year veteran cape.\",\n  \"image\": \"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400\",\n  \"price\": 349,\n  \"stock\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data._id) {",
+                      "        pm.collectionVariables.set(\"rs3AccountId\", res.data._id);",
+                      "        console.log(\"rs3AccountId saved:\", res.data._id);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update RS3 Account (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/rs3/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "rs3",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3AccountId}}",
+                      "description": "RS3 Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Update RS3 account listing",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"2898 Total Level RS3 Maxed Main (Discounted)\",\n  \"price\": 319\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Adjust RS3 Account Stock (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/rs3/:id/stock",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "rs3",
+                    ":id",
+                    "stock"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3AccountId}}",
+                      "description": "RS3 Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Adjust RS3 account stock count",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": -1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete RS3 Account (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/rs3/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    "rs3",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{rs3AccountId}}",
+                      "description": "RS3 Account Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Delete RS3 account listing",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06. Pricing, Valutes & Gateways",
+      "item": [
+        {
+          "name": "Valutes (Currencies)",
+          "item": [
+            {
+              "name": "Get All Valutes",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/valutes?page=1&limit=10&search=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "valutes"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Search currency name",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List all supported payment currencies/valutes"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Valute By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/valutes/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "valutes",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{valuteId}}",
+                      "description": "Valute Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Get specific currency rate details"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Valute (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/valutes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "valutes"
+                  ]
+                },
+                "description": "Create currency config with game buy/sell exchange multipliers",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"real_id\": \"USD\",\n  \"name\": \"US Dollar\",\n  \"image\": \"https://flagcdn.com/w40/us.png\",\n  \"osrs_buy\": 0.22,\n  \"osrs_sell\": 0.28,\n  \"rs3_buy\": 0.031,\n  \"rs3_sell\": 0.042,\n  \"paytriot\": false,\n  \"login_required\": false,\n  \"buy_limit_min\": 5,\n  \"buy_limit_max\": 5000,\n  \"sell_limit_min\": 5,\n  \"sell_limit_max\": 5000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data._id) {",
+                      "        pm.collectionVariables.set(\"valuteId\", res.data._id);",
+                      "        console.log(\"valuteId saved:\", res.data._id);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Valute (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/valutes/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "valutes",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{valuteId}}",
+                      "description": "Valute Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Update currency rates and limits",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"US Dollar (Updated)\",\n  \"osrs_buy\": 0.23,\n  \"osrs_sell\": 0.29,\n  \"buy_limit_max\": 10000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Valute (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/valutes/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "valutes",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{valuteId}}",
+                      "description": "Valute Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Delete valute configuration",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Base Price & Gold Rate",
+          "item": [
+            {
+              "name": "Get Base Gold Price",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/base-price",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "base-price"
+                  ]
+                },
+                "description": "Fetch singleton base price rates for OSRS and RS3 gold per million"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Base Gold Price (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/base-price",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "base-price"
+                  ]
+                },
+                "description": "Admin update base price per M for OSRS and RS3",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"osrs\": 0.24,\n  \"rs3\": 0.034\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Calculate Gold Rate (OSRS)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/gold-rate?game=osrs&valuteId=%7B%7BvaluteId%7D%7D",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "gold-rate"
+                  ],
+                  "query": [
+                    {
+                      "key": "game",
+                      "value": "osrs",
+                      "description": "Game mode ('osrs' or 'rs3')",
+                      "disabled": false
+                    },
+                    {
+                      "key": "valuteId",
+                      "value": "{{valuteId}}",
+                      "description": "Optional Valute Mongo ID to calculate in local currency",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Calculate effective gold rate considering base price and currency multipliers"
+              },
+              "response": []
+            },
+            {
+              "name": "Calculate Gold Rate (RS3)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/gold-rate?game=rs3",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "gold-rate"
+                  ],
+                  "query": [
+                    {
+                      "key": "game",
+                      "value": "rs3",
+                      "description": "Game mode",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Calculate RS3 gold rate"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Payment Gateway Settings",
+          "item": [
+            {
+              "name": "Get All Payment Gateways",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "payments"
+                  ]
+                },
+                "description": "Fetch all configured payment gateway records"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Payment Gateway By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/payments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "payments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{paymentGatewayId}}",
+                      "description": "Payment Gateway Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Get specific payment gateway configuration"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Payment Gateway (Admin)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "payments"
+                  ]
+                },
+                "description": "Create payment gateway rules and fees per game and action",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"valuteId\": \"{{valuteId}}\",\n  \"osrs_buy\": {\n    \"gateway\": \"stripe\",\n    \"feePercentage\": 2.9,\n    \"fixedFee\": 0.3,\n    \"enabled\": true\n  },\n  \"osrs_sell\": {\n    \"gateway\": \"paypal\",\n    \"feePercentage\": 2,\n    \"fixedFee\": 0.25,\n    \"enabled\": true\n  },\n  \"rs3_buy\": {\n    \"gateway\": \"crypto\",\n    \"feePercentage\": 1,\n    \"fixedFee\": 0,\n    \"enabled\": true\n  },\n  \"rs3_sell\": {\n    \"gateway\": \"bank_transfer\",\n    \"feePercentage\": 0.5,\n    \"fixedFee\": 1,\n    \"enabled\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data._id) {",
+                      "        pm.collectionVariables.set(\"paymentGatewayId\", res.data._id);",
+                      "        console.log(\"paymentGatewayId saved:\", res.data._id);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Payment Gateway (Admin)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/payments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "payments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{paymentGatewayId}}",
+                      "description": "Payment Gateway Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Update payment gateway config",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"osrs_buy\": {\n    \"gateway\": \"stripe\",\n    \"feePercentage\": 2.5,\n    \"fixedFee\": 0.25,\n    \"enabled\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Payment Gateway (Admin)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing/payments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing",
+                    "payments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{paymentGatewayId}}",
+                      "description": "Payment Gateway Mongo ID"
+                    }
+                  ]
+                },
+                "description": "Delete payment gateway config record",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07. Sessions",
+      "item": [
+        {
+          "name": "Create / Init Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            },
+            "description": "Initialize or store user cart / checkout session",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_id\": \"sess_cart_demo_001\",\n  \"userId\": \"{{userId}}\",\n  \"data\": {\n    \"cart\": [\n      {\n        \"itemType\": \"osrs_item\",\n        \"itemId\": \"{{osrsItemId}}\",\n        \"quantity\": 5,\n        \"priceEach\": 0.24\n      },\n      {\n        \"itemType\": \"osrs_account\",\n        \"accountId\": \"{{osrsAccountId}}\",\n        \"quantity\": 1,\n        \"priceEach\": 249.99\n      }\n    ],\n    \"selectedCurrency\": \"USD\"\n  },\n  \"expiry\": \"2026-12-31T23:59:59.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    var res = pm.response.json();",
+                  "    if (res.data && res.data.session_id) {",
+                  "        pm.collectionVariables.set(\"sessionId\", res.data.session_id);",
+                  "        console.log(\"sessionId saved:\", res.data.session_id);",
+                  "    }",
+                  "}",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Session By SessionId",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/:sessionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                ":sessionId"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Unique session identifier"
+                }
+              ]
+            },
+            "description": "Retrieve session state by string sessionId"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Sessions (Authenticated)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/user/:userId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}",
+                  "description": "Target User Mongo ID"
+                }
+              ]
+            },
+            "description": "List all active sessions belonging to a specific user",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Session State",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/:sessionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                ":sessionId"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Unique session identifier"
+                }
+              ]
+            },
+            "description": "Update arbitrary session data payload or renew expiry",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"cart\": [\n      {\n        \"itemType\": \"osrs_item\",\n        \"itemId\": \"{{osrsItemId}}\",\n        \"quantity\": 10,\n        \"priceEach\": 0.24\n      }\n    ],\n    \"step\": \"checkout_payment_selection\"\n  },\n  \"expiry\": \"2027-01-01T00:00:00.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Session",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sessions/:sessionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sessions",
+                ":sessionId"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "{{sessionId}}",
+                  "description": "Unique session identifier"
+                }
+              ]
+            },
+            "description": "Delete session and clear associated cached state"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "08. Payments",
+      "item": [
+        {
+          "name": "PayPal Gateway",
+          "item": [
+            {
+              "name": "Create PayPal Order",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/paypal/create-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "paypal",
+                    "create-order"
+                  ]
+                },
+                "description": "Initiate PayPal order and get approve URL",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 22.5,\n  \"currency\": \"USD\",\n  \"customerEmail\": \"customer@example.com\",\n  \"productType\": \"gold_osrs\",\n  \"productDetails\": {\n    \"gameCharacterName\": \"ZihadRS\",\n    \"quantityM\": 100,\n    \"description\": \"100M OSRS Gold\"\n  },\n  \"returnUrl\": \"http://localhost:3000/payment/success\",\n  \"cancelUrl\": \"http://localhost:3000/payment/cancel\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Capture PayPal Order",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/paypal/capture-order/:orderId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "paypal",
+                    "capture-order",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "8XX12345YY67890",
+                      "description": "PayPal Order ID"
+                    }
+                  ]
+                },
+                "description": "Capture authorized PayPal payment"
+              },
+              "response": []
+            },
+            {
+              "name": "PayPal Webhook Listener",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/paypal/webhook",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "paypal",
+                    "webhook"
+                  ]
+                },
+                "description": "PayPal Webhook endpoint for async event verification",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event_type\": \"PAYMENT.CAPTURE.COMPLETED\",\n  \"resource\": {\n    \"id\": \"CAPTURE-12345\",\n    \"custom_id\": \"65cb75f68fb978d2bcfb1234\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Skrill Gateway",
+          "item": [
+            {
+              "name": "Create Skrill Payment Session",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/skrill/create-session",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "skrill",
+                    "create-session"
+                  ]
+                },
+                "description": "Generate Skrill Quick Checkout parameters and form fields",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 25,\n  \"currency\": \"USD\",\n  \"customerEmail\": \"customer@example.com\",\n  \"productType\": \"gold_osrs\",\n  \"productDetails\": {\n    \"gameCharacterName\": \"ZihadRS\",\n    \"quantityM\": 100\n  },\n  \"returnUrl\": \"http://localhost:3000/payment/success\",\n  \"cancelUrl\": \"http://localhost:3000/payment/cancel\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Skrill IPN / Status Callback",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/skrill/ipn",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "skrill",
+                    "ipn"
+                  ]
+                },
+                "description": "Skrill Status Callback / IPN webhook with MD5 signature validation",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"merchant_id\": \"123456\",\n  \"transaction_id\": \"65cb75f68fb978d2bcfb1234\",\n  \"mb_transaction_id\": \"SKRILL-998877\",\n  \"mb_amount\": \"25.00\",\n  \"mb_currency\": \"USD\",\n  \"status\": \"2\",\n  \"md5sig\": \"A1B2C3D4E5F6\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Transaction Queries",
+          "item": [
+            {
+              "name": "Get All Transactions (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/transactions?page=1&limit=10&gateway=paypal&status=completed&search=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "transactions"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "gateway",
+                      "value": "paypal",
+                      "description": "Filter by gateway (paypal/skrill)",
+                      "disabled": false
+                    },
+                    {
+                      "key": "status",
+                      "value": "completed",
+                      "description": "Filter by status",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Search by email or transaction id",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List all payment transactions with filters and pagination (Admin)",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Transactions (Authenticated User)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/transactions/my?page=1&limit=10",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "transactions",
+                    "my"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Limit",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "List current user's transaction history",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Transaction By ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payments/transactions/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payments",
+                    "transactions",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "65cb75f68fb978d2bcfb1234",
+                      "description": "Transaction Mongo ID or Gateway ID"
+                    }
+                  ]
+                },
+                "description": "Retrieve details of a single transaction",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09. Live Chat & Order Pre-Fills",
+      "item": [
+        {
+          "name": "Automated Order Pre-Fills",
+          "item": [
+            {
+              "name": "Pre-fill Buy Gold Order",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/prefill-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "prefill-order"
+                  ]
+                },
+                "description": "Triggered on clicking 'Buy Gold' across site to generate automated formatted message in live chat",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guestId\": \"guest_browser_token_123\",\n  \"customerName\": \"Zihad Customer\",\n  \"customerEmail\": \"zihad@example.com\",\n  \"actionType\": \"buy_gold\",\n  \"game\": \"osrs\",\n  \"quantityM\": 200,\n  \"totalPrice\": 45,\n  \"currency\": \"USD\",\n  \"gameCharacterName\": \"IronZihad\",\n  \"paymentMethod\": \"PayPal\",\n  \"notes\": \"Please deliver at Lumbridge World 301\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data.conversation && res.data.conversation.roomId) {",
+                      "        pm.collectionVariables.set(\"roomId\", res.data.conversation.roomId);",
+                      "        console.log(\"Chat roomId saved:\", res.data.conversation.roomId);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Pre-fill Sell Gold Request",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/prefill-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "prefill-order"
+                  ]
+                },
+                "description": "Triggered on clicking 'Sell Gold' to initiate live trade discussion with Admin",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guestId\": \"guest_browser_token_123\",\n  \"customerName\": \"Seller Pro\",\n  \"customerEmail\": \"seller@example.com\",\n  \"actionType\": \"sell_gold\",\n  \"game\": \"rs3\",\n  \"quantityM\": 500,\n  \"totalPrice\": 15.5,\n  \"currency\": \"USD\",\n  \"gameCharacterName\": \"GoldSeller99\",\n  \"paymentMethod\": \"Skrill\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Pre-fill Buy Item Order",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/prefill-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "prefill-order"
+                  ]
+                },
+                "description": "Triggered on clicking 'Buy Item' button on catalog item cards",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guestId\": \"guest_browser_token_123\",\n  \"customerName\": \"Zihad Customer\",\n  \"actionType\": \"buy_item\",\n  \"game\": \"osrs\",\n  \"itemName\": \"Twisted Bow\",\n  \"quantity\": 1,\n  \"totalPrice\": 240,\n  \"currency\": \"USD\",\n  \"gameCharacterName\": \"Archer99\",\n  \"paymentMethod\": \"PayPal\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Pre-fill Powerleveling / Service Order",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/prefill-order",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "prefill-order"
+                  ]
+                },
+                "description": "Triggered on clicking 'Request Service / Powerleveling' on site",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guestId\": \"guest_browser_token_123\",\n  \"customerName\": \"Zihad Customer\",\n  \"actionType\": \"powerleveling\",\n  \"game\": \"osrs\",\n  \"serviceName\": \"Agility Powerleveling\",\n  \"skillDetails\": \"Level 1 to 99 with Graceful Outfit\",\n  \"totalPrice\": 120,\n  \"currency\": \"USD\",\n  \"gameCharacterName\": \"RunnerBoy\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Conversations & Messages",
+          "item": [
+            {
+              "name": "Init / Resume Conversation",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/conversations/init",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "conversations",
+                    "init"
+                  ]
+                },
+                "description": "Initialize or resume active live chat conversation",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"guestId\": \"guest_browser_token_123\",\n  \"customerName\": \"Zihad Visitor\",\n  \"customerEmail\": \"zihad@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "",
+                      "if (pm.response.code === 201) {",
+                      "    var res = pm.response.json();",
+                      "    if (res.data && res.data.roomId) {",
+                      "        pm.collectionVariables.set(\"roomId\", res.data.roomId);",
+                      "        console.log(\"Chat roomId saved:\", res.data.roomId);",
+                      "    }",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get All Conversations (Admin)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/conversations?page=1&limit=15&status=active&search=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "conversations"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "15",
+                      "description": "Limit",
+                      "disabled": false
+                    },
+                    {
+                      "key": "status",
+                      "value": "active",
+                      "description": "Filter active/closed",
+                      "disabled": false
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Search customer name/email/roomId",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Admin live support queue: list all conversations",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminAccessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Conversations (User)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/conversations/my?page=1&limit=15",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "conversations",
+                    "my"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "15",
+                      "description": "Limit",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Get current user's past support conversations",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Conversation Messages By Room ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/conversations/:roomId?page=1&limit=50",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "conversations",
+                    ":roomId"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Page",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "description": "Limit",
+                      "disabled": false
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "roomId",
+                      "value": "{{roomId}}",
+                      "description": "Room ID identifier"
+                    }
+                  ]
+                },
+                "description": "Retrieve full chat conversation message history"
+              },
+              "response": []
+            },
+            {
+              "name": "Send Message (HTTP Fallback)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/conversations/:roomId/messages",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "conversations",
+                    ":roomId",
+                    "messages"
+                  ],
+                  "variable": [
+                    {
+                      "key": "roomId",
+                      "value": "{{roomId}}",
+                      "description": "Room ID identifier"
+                    }
+                  ]
+                },
+                "description": "Send message via REST endpoint (or use Socket.IO)",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"Hello, I placed an order pre-fill. When can we trade in game?\",\n  \"senderName\": \"Zihad Customer\",\n  \"senderType\": \"customer\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Mark Messages as Read",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/conversations/:roomId/read",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "conversations",
+                    ":roomId",
+                    "read"
+                  ],
+                  "variable": [
+                    {
+                      "key": "roomId",
+                      "value": "{{roomId}}",
+                      "description": "Room ID identifier"
+                    }
+                  ]
+                },
+                "description": "Clear unread count for admin or customer",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readerType\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Close Conversation",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/conversations/:roomId/close",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "conversations",
+                    ":roomId",
+                    "close"
+                  ],
+                  "variable": [
+                    {
+                      "key": "roomId",
+                      "value": "{{roomId}}",
+                      "description": "Room ID identifier"
+                    }
+                  ]
+                },
+                "description": "Mark conversation status as closed/resolved"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

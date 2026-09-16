@@ -10,6 +10,8 @@ import { SessionModule } from './modules/session/session.module';
 import { AccountsModule } from './modules/accounts/accounts.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { PricingModule } from './modules/pricing/pricing.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './infrastructure/database/database.module';
@@ -40,6 +42,8 @@ import { DatabaseModule } from './infrastructure/database/database.module';
     AccountsModule,
     CatalogModule,
     PricingModule,
+    PaymentsModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
