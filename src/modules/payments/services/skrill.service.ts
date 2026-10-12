@@ -53,7 +53,7 @@ export class SkrillService {
       'http://localhost:3000/payment/cancel';
     const backendUrl =
       this.configService.get<string>('BACKEND_URL') || 'http://localhost:5000';
-    const defaultStatusUrl = `${backendUrl}/payments/skrill/ipn`;
+    const defaultStatusUrl = `${backendUrl}/api/v1/payments/skrill/ipn`;
 
     const formFields = {
       pay_to_email: merchantEmail,
