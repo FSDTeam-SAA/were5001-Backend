@@ -182,8 +182,8 @@ export class PaymentsService {
 
     const transactionIdStr = transaction._id.toString();
 
-    // 2. Generate Skrill checkout form parameters
-    const checkoutData = this.skrillService.generateCheckoutData({
+    // 2. Prepare Skrill session (obtains SID and clean redirect URL)
+    const sessionData = await this.skrillService.prepareSession({
       transactionId: transactionIdStr,
       amount: dto.amount,
       currency: dto.currency,
@@ -193,15 +193,17 @@ export class PaymentsService {
       cancelUrl: dto.cancelUrl,
     });
 
-    transaction.gatewayOrderId = transactionIdStr;
+    transaction.gatewayOrderId = sessionData.sessionId || transactionIdStr;
     await transaction.save();
 
     return {
       message: 'Skrill payment session initiated successfully',
       data: {
         transactionId: transaction._id,
-        checkoutUrl: checkoutData.checkoutUrl,
-        formFields: checkoutData.formFields,
+        checkoutUrl: sessionData.redirectUrl,
+        redirectUrl: sessionData.redirectUrl,
+        sessionId: sessionData.sessionId,
+        formFields: sessionData.formFields,
         status: transaction.status,
       },
     };
